@@ -41,5 +41,19 @@
     "@types/react": "^19.1.8",
     "tsup": "^8.5.0",
     "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@tscircuit/copper-pour-solver": "^0.0.32",
+    "@tscircuit/infer-cable-insertion-point": "^0.0.2",
+    "@tscircuit/miniflex": "^0.0.4",
+    "@tscircuit/schematic-trace-solver": "^0.0.68",
+    "@tscircuit/soup-util": "^0.0.41",
+    "calculate-elbow": "^0.0.12",
+    "circuit-json-to-spice": "^0.0.37",
+    "connectivity-map": "^1.0.0",
+    "flatbush": "^4.6.2",
+    "minicssgrid": "^0.0.9",
+    "spicets": "^0.0.4",
+    "spicey": "^0.0.14"
   }
 }

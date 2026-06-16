@@ -1,5 +1,5 @@
 import type { CadModelProp } from "@tscircuit/props";
-import xiaoEsp32C3StepUrl from "../assets/xiao-esp32-c3.step";
+const xiaoEsp32C3StepUrl = "https://unpkg.com/@vinjocarsales/xiao-series/assets/xiao-esp32-c3.step";
 
 export const xiaoEsp32C3CadModel = {
   stepUrl: xiaoEsp32C3StepUrl,
