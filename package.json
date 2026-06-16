@@ -1,0 +1,45 @@
+{
+  "name": "@vinjocarsales/xiao-series",
+  "version": "0.1.1",
+  "description": "Reusable tscircuit components for Seeed Studio XIAO ESP32-S3 and ESP32-C3 modules.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "assets",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --clean --loader:.step=file --loader:.stp=file && tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "tscircuit",
+    "xiao",
+    "seeed",
+    "esp32-s3",
+    "esp32-c3",
+    "footprint"
+  ],
+  "license": "MIT",
+  "peerDependencies": {
+    "@tscircuit/core": "^0.0.1325",
+    "@tscircuit/props": "^0.0.546",
+    "react": ">=18"
+  },
+  "devDependencies": {
+    "@tscircuit/core": "^0.0.1325",
+    "@tscircuit/props": "^0.0.546",
+    "@types/react": "^19.1.8",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3"
+  }
+}
