@@ -1,4 +1,4 @@
-import { XiaoEsp32C3Dip, XiaoEsp32S3Dip } from "@vinjocarsales/xiao-series";
+import { XiaoEsp32C3Dip } from "@tsci/vinjocarsales.xiao-series";
 
 export default () => (
   <board width="45mm" height="35mm">

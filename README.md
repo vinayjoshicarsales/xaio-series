@@ -1,17 +1,19 @@
-# @vinjocarsales/xiao-series
+# @tsci/vinjocarsales.xiao-series
 
 Reusable [tscircuit](https://tscircuit.com) components for the Seeed Studio XIAO ESP32-S3 and ESP32-C3 module family.
 
 ## Installation
 
 ```sh
-npm install @vinjocarsales/xiao-series @tscircuit/core
+npm install @tsci/vinjocarsales.xiao-series
 ```
+
+> This package is published to the tscircuit registry (`npm.tscircuit.com`). No extra registry config is needed when using the tscircuit eval engine or `tsci` CLI — they resolve `@tsci/` packages automatically.
 
 ## Usage
 
 ```tsx
-import { XiaoEsp32S3Dip, XiaoEsp32S3Smd } from "@vinjocarsales/xiao-series";
+import { XiaoEsp32S3Dip, XiaoEsp32S3Smd } from "@tsci/vinjocarsales.xiao-series";
 
 export default () => (
   <board width="45mm" height="35mm">
@@ -29,13 +31,13 @@ export default () => (
 
 - `XiaoEsp32S3Dip` — ESP32-S3 XIAO with 2.54mm through-hole DIP pads.
 - `XiaoEsp32S3Smd` — ESP32-S3 XIAO with castellated SMD pads.
-- `XiaoEsp32C3Dip` — ESP32-C3 XIAO with 2.54mm through-hole DIP pads.
-- `XiaoEsp32C3Smd` — ESP32-C3 XIAO with castellated SMD pads.
+- `XiaoEsp32C3Dip` — ESP32-C3 XIAO with 2.54mm through-hole DIP pads (includes bundled STEP model).
+- `XiaoEsp32C3Smd` — ESP32-C3 XIAO with castellated SMD pads (includes bundled STEP model).
 
 Each component requires a `name` prop, extends `CommonLayoutProps`, and exports a matching hook:
 
 ```tsx
-import { useXiaoEsp32S3Dip } from "@vinjocarsales/xiao-series";
+import { useXiaoEsp32S3Dip } from "@tsci/vinjocarsales.xiao-series";
 
 const U1 = useXiaoEsp32S3Dip("U1");
 ```
@@ -86,31 +88,27 @@ const U1 = useXiaoEsp32S3Dip("U1");
 
 ## Footprints
 
-- DIP variants use two rows of seven plated through-holes.
-- DIP pitch is `2.54mm`.
-- DIP row spacing is `17.78mm` center-to-center.
-- DIP holes are `1.0mm` with `1.8mm` outer copper diameter.
+- DIP variants use two rows of seven plated through-holes at 2.54mm pitch, 17.78mm row spacing, 1.0mm drill / 1.8mm copper diameter.
 - SMD variants use XIAO-compatible castellated side pads on the top layer.
-- ESP32-C3 variants include a STEP 3D model from `assets/xiao-esp32-c3.step`.
-- KiCad through-hole footprints can be referenced with `kicad:` and the `LED_THT` family, for example `kicad:LED_THT/LED_D1.8mm_W1.8mm_H2.4mm_Horizontal_O1.27mm_Z1.6mm`.
+- ESP32-C3 variants include a STEP 3D model (`assets/xiao-esp32-c3.step`).
 
 ## 3D Models
 
-The ESP32-C3 DIP and SMD components use the bundled STEP model by default:
+The ESP32-C3 DIP and SMD components include a bundled STEP model and apply it by default:
 
 ```tsx
 <XiaoEsp32C3Smd name="U1" />
 ```
 
-ESP32-S3 components in this package do not include a bundled STEP model, so `XiaoEsp32S3Dip` and `XiaoEsp32S3Smd` will render only the PCB footprint by default.
-
-You can override the model or tune placement with `cadModel`:
+ESP32-S3 components do not include a bundled STEP model and will render only the PCB footprint by default. You can supply one via `cadModel`:
 
 ```tsx
-<XiaoEsp32C3Smd
+<XiaoEsp32S3Dip
   name="U1"
   cadModel={{
-    stepUrl: "https://example.com/xiao-esp32-c3.step",
+    stepUrl: "https://example.com/xiao-esp32-s3.step",
+    modelUnitToMmScale: 1,
+    modelBoardNormalDirection: "z+",
     zOffsetFromSurface: "0mm",
     rotationOffset: { x: 0, y: 0, z: 0 },
     positionOffset: { x: 0, y: 0, z: 0 },
@@ -123,14 +121,21 @@ You can override the model or tune placement with `cadModel`:
 ### Blink
 
 ```tsx
-import { XiaoEsp32S3Dip } from "@vinjocarsales/xiao-series";
+import { XiaoEsp32C3Dip } from "@tsci/vinjocarsales.xiao-series";
 
 export default () => (
   <board width="45mm" height="35mm">
-    <XiaoEsp32S3Dip name="U1" pcbX={0} pcbY={0} />
+    <XiaoEsp32C3Dip
+      name="U1"
+      cadModel={{
+        stepUrl: "https://example.com/xiao-esp32-c3.step",
+        zOffsetFromSurface: "0mm",
+        rotationOffset: { x: 0, y: 0, z: 0 },
+        positionOffset: { x: 0, y: 0, z: 0 },
+      }}
+    />
 
     <led name="LED1" footprint="0805" pcbX={16} pcbY={4} color="red" />
-
     <resistor name="R1" footprint="0805" resistance="330" pcbX={16} pcbY={-4} />
 
     <trace from="U1.D0" to="R1.pin1" />
@@ -143,7 +148,7 @@ export default () => (
 ### Button
 
 ```tsx
-import { XiaoEsp32C3Dip } from "@vinjocarsales/xiao-series";
+import { XiaoEsp32C3Dip } from "@tsci/vinjocarsales.xiao-series";
 
 export default () => (
   <board width="50mm" height="35mm">
@@ -162,19 +167,37 @@ export default () => (
 );
 ```
 
-### C3 3D Example
+### C3 with 3D model and LED
 
 ```tsx
-import { XiaoEsp32C3Dip } from "@vinjocarsales/xiao-series";
+import { XiaoEsp32C3Dip } from "@tsci/vinjocarsales.xiao-series";
 
 export default () => (
   <board width="50mm" height="35mm">
     <XiaoEsp32C3Dip name="U1" pcbX={-6} pcbY={0} />
 
-    <led name="LED1" footprint="0805" pcbX={16} pcbY={4} color="green" />
+    <led
+      name="LED1"
+      footprint="kicad:LED_THT/LED_D5.0mm_Clear"
+      pcbX={16}
+      pcbY={6}
+      color="red"
+      cadModel={{
+        stepUrl:
+          "https://raw.githubusercontent.com/KiCad/kicad-packages3D/master/LED_THT.3dshapes/LED_D3.0mm.step",
+        modelUnitToMmScale: 1,
+        modelBoardNormalDirection: "z+",
+        zOffsetFromSurface: "0mm",
+        rotationOffset: { x: 0, y: 0, z: 0 },
+        positionOffset: { x: -1.2, y: 0, z: -2 },
+      }}
+    />
 
-    <resistor name="R1" footprint="0805" resistance="330" pcbX={16} pcbY={-4} />
+    <pushbutton name="SW1" footprint="pushbutton_id1.3mm_od2mm" pcbX={18} pcbY={-8} />
+    <resistor name="R1" resistance="330" footprint="axial_p2.54mm_id0.7mm_od1.4mm" pcbX={12} pcbY={-8} />
 
+    <trace from="U1.D2" to="SW1.pin1" />
+    <trace from="SW1.pin2" to="U1.GND" />
     <trace from="U1.D0" to="R1.pin1" />
     <trace from="R1.pin2" to="LED1.anode" />
     <trace from="LED1.cathode" to="U1.GND" />
@@ -185,14 +208,13 @@ export default () => (
 ### Flashlight
 
 ```tsx
-import { XiaoEsp32S3Smd } from "@vinjocarsales/xiao-series";
+import { XiaoEsp32S3Smd } from "@tsci/vinjocarsales.xiao-series";
 
 export default () => (
   <board width="55mm" height="32mm">
     <XiaoEsp32S3Smd name="U1" pcbX={-10} pcbY={0} />
 
     <led name="LED1" footprint="0805" pcbX={18} pcbY={3} color="white" />
-
     <resistor name="R1" footprint="0805" resistance="150" pcbX={18} pcbY={-4} />
 
     <trace from="U1.D10" to="R1.pin1" />
